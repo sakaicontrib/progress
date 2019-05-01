@@ -156,6 +156,7 @@ Temporary Items
 .apdisk
 
 ### Maven ###
+target
 target/
 /target/
 pom.xml.tag
@@ -191,5 +192,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+*.rej
 
 # End of https://www.gitignore.io/api/git,java,macos,maven,windows,eclipse,intellij
