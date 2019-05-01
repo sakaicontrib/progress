@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:th="http://www.thymeleaf.org">
+   <head th:replace="fragments/common :: head"/>
+   <body>
+      <div class="portletBody">
+      <style>
+         .setting-button{
+         width: 100%;
+         text-decoration: underline;
+         text-align: left;
+         }
+         h3 {
+         display: inline;  
+         }
+      </style>
+      <div id="menu" th:insert="fragments/menus :: main(config)"/>
+         <h2>Settings</h2>
+         <div th:if="${errorMessages}">
+            <div th:each="errorMessage : ${errorMessages}">
+                <h4 style="color: red;" th:text="${errorMessage}">
+            </div>
+         </div>
+         <form id="progressSettings" method="post" th:action="@{/config}" th:object="${configForm}">
+            <div id="config" class="panel-group">
+               <div th:each="siteConfig,configIter : ${configForm.configs}">
+                  <div class="panel panel-default">
+                     <div class="panel-heading" role="tab" id="settingsProgressMeasurementHeader">
+                        <h3 class panel-title>
+                           <a role="button" data-toggle="collapse" th:href="@{'#' + ${siteConfig.id}}" aria-expanded="false" aria-controls="settingsProgressEntry" th:text="${siteConfig.configType.type}">
+                           Progress Type
+                           </a>
+                        </h3>
+                        Active: <input type="checkbox" th:checked="*{configs[__${configIter.index}__].active}" th:name="'siteConfig/' + ${siteConfig.id} +'.active'" text="Active"/>
+                        Weight: <input type="number" th:value="*{configs[__${configIter.index}__].weight}" th:name="'siteConfig/' + ${siteConfig.id} +'.weight'" text="Weight"/>
+                     </div>
+                     <div th:id="${siteConfig.id}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="settingsProgressMeasurementHeader">
+                        <div th:each="configValue, configValueIter : ${siteConfig.configValues}">
+                           <div th:switch="${configValue.attribute.attributeType.name}">
+                              <div th:case="String" class="radio">
+                                 <label>
+                                    <!-- <input type="text" th:field="*{configs[__${configIter.index}__].configValues[__${configValueIter.index}__].value}" th:text="${configValue.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/> -->
+                                    <input type="text" th:value="*{configs[__${configIter.index}__].configValues[__${configValueIter.index}__].value}" th:name="'siteConfig/' + ${siteConfig.id} +'.configWideValue/' + ${configValue.id}" th:text="${configValue.attribute.name != null} ? ${configValue.attribute.name} : 'null value!'"/>
+                                 </label>
+                              </div>
+                              <div th:case="integer" class="radio">
+                                 <label>
+                                    <!-- <input type="number" th:field="*{configs[__${configIter.index}__].configValues[__${configValueIter.index}__].value}" th:text="${configValue.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/> -->
+                                    <input type="number" th:value="*{configs[__${configIter.index}__].configValues[__${configValueIter.index}__].value}" th:name="'siteConfig/' + ${siteConfig.id} +'.configWideValue/' + ${configValue.id}" th:text="${configValue.attribute.name != null} ? ${configValue.attribute.name} : 'null value!'"/>
+                                 </label>
+                              </div>
+                              <div th:case="double" class="radio">
+                                 <label>
+                                    <!--<input type="number" th:field="*{configs[__${configIter.index}__].configValues[__${configValueIter.index}__].value}" th:text="${configValue.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/>-->
+                                    <input type="number" th:value="*{configs[__${configIter.index}__].configValues[__${configValueIter.index}__].value}" th:name="'siteConfig/' + ${siteConfig.id} +'.configWideValue/' + ${configValue.id}" th:text="${configValue.attribute.name != null} ? ${configValue.attribute.name} : 'null value!'"/>
+                                 </label>
+                              </div>
+                              <div th:case="boolean" class="radio">
+                                 <label>
+                                    <!-- <input type="checkbox" th:field="*{configs[__${configIter.index}__].configValues[__${configValueIter.index}__].value}" th:text="${configValue.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/> -->
+                                    <input type="checkbox" th:checked="*{configs[__${configIter.index}__].configValues[__${configValueIter.index}__].value}" th:name="'siteConfig/' + ${siteConfig.id} +'.configWideValue/' + ${configValue.id}" th:text="${configValue.attribute.name != null} ? ${configValue.attribute.name} : 'null value!'"/>
+                                 </label>
+                              </div>
+                           </div>
+                        </div>
+                        <div th:each="progressItem,itemIter : ${siteConfig.progressItems}">
+                           <div class="panel-body">
+                              <h5 th:text="${progressItem.name}"/>
+                               Active: <input type="checkbox" th:checked="*{configs[__${configIter.index}__].progressItems[__${itemIter.index}__].active}" th:name="'siteConfig/' + ${siteConfig.id} +'.progressItem/' + ${progressItem.id} + '.active'" text="Active"/>
+                              <div th:each="progressItemAttribute,valueIter : ${progressItem.values}">  
+                                 <div th:switch="${progressItemAttribute.attribute.attributeType.name}">
+                                    <div th:case="String" class="radio">
+                                       <label>
+                                          <!-- <input type="text" th:field="*{configs[__${configIter.index}__].progressItems[__${itemIter.index}__].values[__${valueIter.index}__].value}" th:text="${progressItemAttribute.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/> -->
+                                          <input type="text" th:value="*{configs[__${configIter.index}__].progressItems[__${itemIter.index}__].values[__${valueIter.index}__].value}" th:name="'siteConfig/' + ${siteConfig.id} +'.progressItem/' + ${progressItem.id} + '.progressItemAttribute/' + ${progressItemAttribute.id}" th:text="${progressItemAttribute.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/>
+                                       </label>
+                                    </div>
+                                    <div th:case="integer" class="radio">
+                                       <label>
+                                          <!-- <input type="number" th:field="*{configs[__${configIter.index}__].progressItems[__${itemIter.index}__].values[__${valueIter.index}__].value}" th:text="${progressItemAttribute.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/> -->
+                                          <input type="number" th:value="*{configs[__${configIter.index}__].progressItems[__${itemIter.index}__].values[__${valueIter.index}__].value}" th:name="'siteConfig/' + ${siteConfig.id} +'.progressItem/' + ${progressItem.id} + '.progressItemAttribute/' + ${progressItemAttribute.id}" th:text="${progressItemAttribute.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/>
+                                       </label>
+                                    </div>
+                                    <div th:case="double" class="radio">
+                                       <label>
+                                          <!--<input type="number" th:field="*{configs[__${configIter.index}__].progressItems[__${itemIter.index}__].values[__${valueIter.index}__].value}" th:text="${progressItemAttribute.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/>-->
+                                          <input type="number" th:value="*{configs[__${configIter.index}__].progressItems[__${itemIter.index}__].values[__${valueIter.index}__].value}" th:name="'siteConfig/' + ${siteConfig.id} +'.progressItem/' + ${progressItem.id} + '.progressItemAttribute/' + ${progressItemAttribute.id}" th:text="${progressItemAttribute.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/>
+                                       </label>
+                                    </div>
+                                    <div th:case="boolean" class="radio">
+                                       <label>
+                                          <!-- <input type="checkbox" th:field="*{configs[__${configIter.index}__].progressItems[__${itemIter.index}__].values[__${valueIter.index}__].value}" th:text="${progressItemAttribute.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/> -->
+                                          <input type="checkbox" th:checked="*{configs[__${configIter.index}__].progressItems[__${itemIter.index}__].values[__${valueIter.index}__].value}" th:name="'siteConfig/' + ${siteConfig.id} +'.progressItem/' + ${progressItem.id} + '.progressItemAttribute/' + ${progressItemAttribute.id}" th:text="${progressItemAttribute.attribute.name != null} ? ${progressItemAttribute.attribute.name} : 'null value!'"/>
+                                       </label>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="act">
+               <input type="submit" class="active" name="submit" id="submit" value = "Save Changes"/>
+               <input type="button" name="cancel" id="cancel" value="Cancel" onClick="window.location.reload()"/>
+            </div>
+         </form>
+      </div>
+   </body>
+</html>

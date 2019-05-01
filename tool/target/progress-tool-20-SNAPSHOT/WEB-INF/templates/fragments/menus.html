@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="main (active)" style="background: white">
+    <ul class="navIntraTool actionToolBar">
+        <li role="presentation">
+            <span class="current" th:if="${active} == 'index'" th:text="#{menus.progress}">Progress</span>
+            <span th:unless="${active} == 'index'">
+                <a href="#" th:href="@{/index}" th:text="#{menus.progress}">Progress</a>
+            </span>
+        </li>
+
+        <li role="presentation">
+            <span class="current" th:if="${active} == 'config'" th:text="#{menus.config}">Settings</span>
+            <span id="settings" th:unless="${active} == 'config'">
+                <a href="#" th:href="@{/config}" th:text="#{menus.config}">Settings</a>
+            </span>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

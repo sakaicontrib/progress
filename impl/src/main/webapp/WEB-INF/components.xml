@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <context:component-scan base-package="org.sakaiproject.progress"/>
+    <tx:annotation-driven transaction-manager="org.sakaiproject.springframework.orm.hibernate.GlobalTransactionManager"/>
+
+    <bean id="org.sakaiproject.springframework.orm.hibernate.impl.AdditionalHibernateMappings.progress"
+          class="org.sakaiproject.springframework.orm.hibernate.impl.AdditionalHibernateMappingsImpl">
+        <property name="annotatedClasses">
+            <list>
+                <value>org.sakaiproject.progress.model.data.entity.ProgressAttributeType</value>
+                <value>org.sakaiproject.progress.model.data.entity.ProgressAttributeValue</value>
+                <value>org.sakaiproject.progress.model.data.entity.ProgressConfigurationAttribute</value>
+                <value>org.sakaiproject.progress.model.data.entity.ProgressConfigurationAttributeValue</value>
+                <value>org.sakaiproject.progress.model.data.entity.ProgressConfigurationType</value>
+                <value>org.sakaiproject.progress.model.data.entity.ProgressItem</value>
+                <value>org.sakaiproject.progress.model.data.entity.ProgressSiteConfiguration</value>
+            </list>
+        </property>
+    </bean>
+    
+	<bean id="org.sakaiproject.progress.model.data.repository.ConfigurationTypeRepository"
+          class="org.sakaiproject.progress.impl.persistence.ConfigurationTypeRepositoryImpl">
+        <property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory"/>
+    </bean>
+    
+    <bean id="org.sakaiproject.progress.model.data.repository.SiteConfigurationRepository"
+          class="org.sakaiproject.progress.impl.persistence.SiteConfigurationRepositoryImpl">
+        <property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory"/>
+    </bean>
+    
+    <bean id="org.sakaiproject.progress.model.data.repository.AttributeTypeRepository"
+          class="org.sakaiproject.progress.impl.persistence.AttributeTypeRepositoryImpl">
+        <property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory"/>
+    </bean>
+
+    <bean
+            id="org.sakaiproject.progress.impl.ConfigurationManager"
+            class="org.sakaiproject.progress.impl.ConfigurationManager"
+            init-method="initializeImplementations">
+    </bean>
+
+    <!-- This chooses the implementation that is used based on the configuration. Will return one of the other implementations-->
+    <bean
+        id="org.sakaiproject.progress.impl.ImplementationChooserImpl"
+        class="org.sakaiproject.progress.impl.ImplementationController">
+    </bean>
+
+    <!--This is the implementation of progress measurement based on Assignment Completion-->
+    <bean
+        id="org.sakaiproject.progress.impl.AssignmentProgessImpl"
+        class="org.sakaiproject.progress.impl.AssignmentProgessImpl">
+        <property name="assignmentService" ref="org.sakaiproject.assignment.api.AssignmentService" />
+    </bean>
+
+    <!--This is the bean that is currently being used as the BaseImplementation for Progress Item. This will
+    change as new implementations are created-->
+    <bean
+        id="org.sakaiproject.progress.impl.GradebookProgressImpl"
+        class="org.sakaiproject.progress.impl.GradebookProgressImpl"
+        scope="prototype">
+        <property name="gradebookService" ref="org.sakaiproject.service.gradebook.GradebookService" />
+        <property name="gradebookFrameworkService" ref="org.sakaiproject.service.gradebook.GradebookFrameworkService"/>
+    </bean>
+
+    <bean
+        id="org.sakaiproject.progress.impl.ForumProgressImpl"
+        class="org.sakaiproject.progress.impl.ForumProgressImpl">
+        <property name="discussionForumManager" ref="org.sakaiproject.api.app.messageforums.ui.DiscussionForumManager"/>
+    </bean>
+    
+    <bean
+        id="org.sakaiproject.progress.impl.AssessmentProgressImpl"
+        class="org.sakaiproject.progress.impl.AssessmentProgressImpl">
+    </bean>
+    <!-- Gets/Sets the configuration in the database-->
+    
+    <bean
+    		id="org.sakaiproject.progress.impl.ProgressBuilder"
+    		class="org.sakaiproject.progress.impl.ProgressBuilder">
+    </bean>
+    
+    <bean
+    		id="org.sakaiproject.progress.api.IProgressValidator"
+    		class="org.sakaiproject.progress.impl.ProgressValidator">
+    </bean>
+
+    <bean
+        id="org.sakaiproject.progress.impl.CommonMethods"
+        class="org.sakaiproject.progress.impl.CommonMethods">
+        <property name="userDirectoryService" ref="org.sakaiproject.user.api.UserDirectoryService"/>
+        <property name="securityService" ref="org.sakaiproject.authz.api.SecurityService"/>
+        <property name="siteService" ref="org.sakaiproject.site.api.SiteService"/>
+    </bean>
+</beans>

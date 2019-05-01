@@ -1,0 +1,5 @@
+org/sakaiproject/progress/tool/formatter/DateTimeLocalFormatter.class
+org/sakaiproject/progress/tool/ResourceLoaderMessageSource.class
+org/sakaiproject/progress/tool/RequestParamParser.class
+org/sakaiproject/progress/tool/MainController.class
+org/sakaiproject/progress/tool/SpringMvcConfiguration.class
