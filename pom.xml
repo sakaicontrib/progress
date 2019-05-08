@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>progress-base</name>
+    <description>A Sakai Spring MVC project using Thymeleaf</description>
+    <inceptionYear>2018</inceptionYear>
+
+    <groupId>org.sakaiproject.progress</groupId>
+    <artifactId>progress-base</artifactId>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>org.sakaiproject</groupId>
+        <artifactId>master</artifactId>
+        <version>20-SNAPSHOT</version>
+        <relativePath>../master/pom.xml</relativePath>
+    </parent>
+
+
+
+    <modules>
+        <module>api</module>
+        <module>impl</module>
+        <module>tool</module>
+    </modules>
+
+
+
+    <licenses>
+        <license>
+            <name>ECLv2 License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <!--<ciManagement>-->
+        <!--<system>Travis CI</system>-->
+        <!--<url>https://travis-ci.org/ern/sakai-widget</url>-->
+        <!--<notifiers/>-->
+    <!--</ciManagement>-->
+
+
+    <!--<developers>-->
+        <!--<developer>-->
+            <!--<id>ern</id>-->
+            <!--<name>Earle Nietzel</name>-->
+            <!--<email>earle@longsight.com</email>-->
+            <!--<url>https://github.com/ern</url>-->
+            <!--<organization>Longsight</organization>-->
+            <!--<organizationUrl>http://www.longsight.com</organizationUrl>-->
+            <!--<roles>-->
+                <!--<role>Developer</role>-->
+            <!--</roles>-->
+            <!--<timezone>-5</timezone>-->
+            <!--<properties/>-->
+        <!--</developer>-->
+    <!--</developers>-->
+
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
